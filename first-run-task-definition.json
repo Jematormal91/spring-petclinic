@@ -39,7 +39,7 @@
       "secrets": null,
       "dockerSecurityOptions": null,
       "memory": null,
-      "memoryReservation": 2000,
+      "memoryReservation": 512,
       "volumesFrom": [],
       "stopTimeout": null,
       "image": "httpd:2.4",
@@ -63,7 +63,7 @@
     }
   ],
   "placementConstraints": [],
-  "memory": "2000",
+  "memory": "512",
   "taskRoleArn": null,
   "compatibilities": [
     "EC2",
