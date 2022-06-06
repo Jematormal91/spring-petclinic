@@ -1,4 +1,4 @@
-name: Push Docker image to AWS ECR
+name: Build and Push Docker image to AWS ECR
 
 on:
   push:
@@ -8,14 +8,16 @@ on:
     
 env:
   IMAGE: docker.io/library/spring-petclinic:2.7.0-SNAPSHOT
+  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  IMAGE_TAG: ${{ github.sha }}
   
 jobs:
   build:
     runs-on: ubuntu-latest
-    
     steps:
       - uses: actions/checkout@v3
-      - name: Push image to AWS ECR
+      - name: Build and Push image to AWS ECR
         run: |
+          ./mvnw spring-boot:build-image
           docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
           docker push 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
