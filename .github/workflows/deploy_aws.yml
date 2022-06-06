@@ -44,7 +44,10 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
-      run: ./mvnw spring-boot:build-image
+      run: |
+          ./mvnw spring-boot:build-image
+          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
+          docker push 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
