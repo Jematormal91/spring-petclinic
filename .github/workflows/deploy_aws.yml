@@ -10,7 +10,7 @@ env:
   ECR_REPOSITORY: my-ecr-repo         
   ECS_SERVICE: sample-app-service                
   ECS_CLUSTER: default               
-  ECS_TASK_DEFINITION: first-run-task-definition.json                                        
+  ECS_TASK_DEFINITION: task-definition.json                                        
   CONTAINER_NAME: sample-app   
   IMAGE: docker.io/library/spring-petclinic:2.7.0-SNAPSHOT
                                        
