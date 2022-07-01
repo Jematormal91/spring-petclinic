@@ -50,7 +50,7 @@ jobs:
       id: push-image
       env:
         DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image:latest }}
-      run: docker push docker-image:latest
+      run: docker push ${{ env.DOCKER_IMAGE }}
           
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
