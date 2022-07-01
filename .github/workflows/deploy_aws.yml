@@ -48,8 +48,8 @@ jobs:
     - name: Tag Docker image
       id: tag-image
       env:
-        DOCKER_IMAGE: ${{ steps.build-image.outputs.tag }}
-      run: docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT ${{env.DOCKER_IMAGE}}
+        DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
+      run: docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT ${{env.DOCKER_IMAGE}}:latest
     
     - name: Push Docker image
       id: push-image
