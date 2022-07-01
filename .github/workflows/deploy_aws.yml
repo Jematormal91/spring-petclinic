@@ -44,16 +44,21 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
           ./mvnw spring-boot:build-image
-          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT docker_image:latest
     
-    - name: Push image
-      id: push-image
+    - name: Tag Docker image
+      id: tag-image
       env:
-        DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image:latest }}
+        DOCKER_IMAGE: ${{ steps.build-image.outputs.tag }}
+      run: docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT ${{env.DOCKER_IMAGE}}
+    
+    - name: Push Docker image
+      id: push-image
       run: docker push ${{ env.DOCKER_IMAGE }}
           
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
+      env:
+        DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image }}
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
