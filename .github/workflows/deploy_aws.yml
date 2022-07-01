@@ -11,7 +11,7 @@ env:
   ECS_SERVICE: sample-app-service                
   ECS_CLUSTER: default               
   ECS_TASK_DEFINITION: task-definition.json                                        
-  CONTAINER_NAME: sample-app                                        
+  CONTAINER_NAME: sample-app      
 
 permissions:
   contents: read
@@ -44,16 +44,21 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
           ./mvnw spring-boot:build-image
-          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
-          docker push 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
-
+          docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT docker_image:latest
+    
+    - name: Push image
+      id: push-image
+      env:
+        DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image:latest }}
+      run: docker push docker-image:latest
+          
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
         container-name: ${{ env.CONTAINER_NAME }}
-        image: 258892668983.dkr.ecr.us-east-1.amazonaws.com/my-ecr-repo:latest
+        image: ${{ env.DOCKER_IMAGE }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
