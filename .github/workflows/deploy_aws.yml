@@ -45,12 +45,12 @@ jobs:
       run: |
           ./mvnw spring-boot:build-image
           docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT docker_image:latest
-          docker push docker-image:latest
     
-    - name: Save image tag
-      id: image-variable
+    - name: Push image
+      id: push-image
       env:
         DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image:latest }}
+      run: docker push docker-image:latest
           
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
