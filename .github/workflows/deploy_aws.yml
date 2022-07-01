@@ -51,14 +51,12 @@ jobs:
     
     - name: Push Docker image
       id: push-image
-      env:
-        DOCKER_IMAGE: ${{ steps.tag-image.outputs.tag }}
-      run: docker push ${{ env.DOCKER_IMAGE }}
+      run: docker push docker-image:latest
           
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
       env:
-        DOCKER_IMAGE: ${{ steps.build-image.outputs.docker-image }}
+        DOCKER_IMAGE: ${{ steps.tag-image.outputs.tag }}
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ${{ env.ECS_TASK_DEFINITION }}
