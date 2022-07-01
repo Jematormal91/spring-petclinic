@@ -47,12 +47,12 @@ jobs:
     
     - name: Tag Docker image
       id: tag-image
-      env:
-        DOCKER_IMAGE: ${{ steps.build-image.outputs.image }}
-      run: docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT ${{env.DOCKER_IMAGE}}:latest
+      run: docker tag docker.io/library/spring-petclinic:2.7.0-SNAPSHOT docker-image:latest
     
     - name: Push Docker image
       id: push-image
+      env:
+        DOCKER_IMAGE: ${{ steps.tag-image.outputs.tag }}
       run: docker push ${{ env.DOCKER_IMAGE }}
           
     - name: Fill in the new image ID in the Amazon ECS task definition
